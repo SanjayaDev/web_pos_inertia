@@ -38,20 +38,18 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             "session" => [
-                "status" => fn() => $request->session()->get("status"),
-                "success" => fn() => $request->session()->get("success"),
-                "error" => fn() => $request->session()->get("error"),
+                "status" => $request->session()->get("status"),
+                "success" => $request->session()->get("success"),
+                "error" => $request->session()->get("error"),
             ],
             "auth" => [
                 "user"  => $request->user() ? $request->user() : null,
                 "permissions"  => $request->user() ? $request->user()->getPermissionArray() : null,
             ],
-            "route" => function() use ($request) {
-                return [
-                    "params" => $request->route()->parameter(),
-                    "query" => $request->all()
-                ];
-            }
+            "route" => [
+                "params" => $request->route()->parameters(),
+                "query" => $request->all()
+            ]
         ]);
     }
 }
