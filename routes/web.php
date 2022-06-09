@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\Apps\DashboardController;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,16 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return Inertia::render('Auth/Login');
+});
+
+Route::prefix("apps")->group(function() {
+    Route::group(["middleware" => ["auth"]], function() {
+        Route::get("/dashboard", DashboardController::class)->name("apps.dashboard");
+
+        Route::get("/permissions", \App\Http\Controllers\Apps\PermissionController::class)->name("apps.permissions.index")->middleware("permission:permissions.index");
+
+        Route::resource("/roles", \App\Http\Controllers\Apps\RoleController::class, ["as" => "apps"])
+        ->middleware("permission:roles.index|roles.create|roles.edit|roles.delete");
+    });
 });
