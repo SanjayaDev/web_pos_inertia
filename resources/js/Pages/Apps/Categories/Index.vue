@@ -97,5 +97,5 @@ const destroy = (id) => {
       });
     }
   })
-} 
+}
 </script>

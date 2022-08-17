@@ -89,28 +89,45 @@
 
 <script setup>
 import { Inertia } from '@inertiajs/inertia';
-import { reactive } from 'vue';
+import { onMounted, reactive } from 'vue';
 
 const props = defineProps({
   errors: Object,
   categories: Array,
-  product: Object
+  product: {
+    type: Object,
+    default(rawProps) {
+        return {
+            barcode: '',
+            category_id: '',
+            title: '',
+            stock: '',
+            description: '',
+            buy_price: '',
+            sell_price: '',
+        }
+    }
+  }
 });
 
 const emit = defineEmits(["onSubmitData"]);
 
 const form = reactive({
   image: '',
-  barcode: '',
-  category_id: '',
-  title: '',
-  description: '',
-  buy_price: '',
-  sell_price: '',
-  stock: ''
+  barcode: props.product.barcode ?? '',
+  category_id: props.product.category_id ?? '',
+  title: props.product.title ?? '',
+  description: props.product.description,
+  buy_price: props.product.buy_price,
+  sell_price: props.product.buy_price,
+  stock: props.product.stock,
 });
 
 const submitData = (event) => {
   emit("onSubmitData", form);
 }
+
+onMounted(() => {
+    form.category_id = props.product.category_id != "" ? props.product.category_id : props.categories[0].id;
+});
 </script>
