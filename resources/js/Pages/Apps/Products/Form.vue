@@ -88,7 +88,6 @@
 </template>
 
 <script setup>
-import { Inertia } from '@inertiajs/inertia';
 import { onMounted, reactive } from 'vue';
 
 const props = defineProps({
